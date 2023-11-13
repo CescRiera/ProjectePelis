@@ -1,9 +1,7 @@
 package edu.fje.projectepelicules;
-
-import static edu.fje.projectepelicules.Resources.TVShowImages;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,10 +9,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView);
@@ -55,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
         loadRandomTVShow();
     }
 
+    private TVShow getRandomTVShow() {
+        List<TVShow> tvShowsList = new ArrayList<>(tvShowsSet);
+        Collections.shuffle(tvShowsList);
+        return tvShowsList.get(0);
+    }
+
     private void initializeTVShows() {
         tvShowsSet = new HashSet<>();
         Resources resources = new Resources();
@@ -63,38 +63,34 @@ public class MainActivity extends AppCompatActivity {
 
     // Modify loadRandomTVShow to reset the UI for retrying
     private void loadRandomTVShow() {
-        if (tvShowsSet.isEmpty()) {
-            return;
-        }
-        tvShowsSet.remove(currentTVShow);
-
-        if (tvShowsSet.isEmpty()) {
-            // Handle the case when there are no more TV shows left
-            // You can display a message or perform any other desired action
-            return;
-        }
-
         // Select a new random TV show from the remaining set
-        currentTVShow = tvShowsSet.iterator().next();
+        currentTVShow = getRandomTVShow();
 
-        // Display the new image
-        imageView.setImageResource(currentTVShow.getImageResourceId());
+        // Check if the selected TV show has a valid image ID
+        if (currentTVShow.getImageResourceId() != -1) {
+            // Display the new image
+            imageView.setImageResource(currentTVShow.getImageResourceId());
 
-        // Display the TV show name as the correct option
-        List<String> options = getRandomOptions(currentTVShow.getName());
-        Collections.shuffle(options);
+            // Display the TV show name as the correct option
+            List<String> options = getRandomOptions(currentTVShow.getName());
+            Collections.shuffle(options);
 
-        radioGroup.removeAllViews();
-        for (String option : options) {
-            RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(option);
-            radioGroup.addView(radioButton);
+            int radioButtonsCount = radioGroup.getChildCount();
+            for (int i = 0; i < radioButtonsCount; i++) {
+                RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                radioButton.setText(options.get(i));
+            }
+
+            checkButton.setEnabled(true);
+            answerTextView.setVisibility(View.GONE);
+            radioGroup.clearCheck();
+        } else {
+            // Handle the case where the TV show has no image ID
+            // You can choose to skip this TV show and load another one or handle it as needed.
+            loadRandomTVShow();
         }
-
-        checkButton.setEnabled(true);
-        answerTextView.setVisibility(View.GONE);
-        radioGroup.clearCheck();
     }
+
 
     private List<String> getRandomOptions(String correctOption) {
         List<String> options = new ArrayList<>();
@@ -108,12 +104,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return options;
-    }
-
-    private TVShow getRandomTVShow() {
-        List<TVShow> tvShowsList = new ArrayList<>(tvShowsSet);
-        Collections.shuffle(tvShowsList);
-        return tvShowsList.get(0);
     }
 
     private void checkAnswer() {
@@ -132,10 +122,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (isCorrect) {
-                answerTextView.setText("¡Respuesta Correcta!");
+                tvShowsSet.remove(currentTVShow);
                 loadRandomTVShow();
             } else {
-                answerTextView.setText("Respuesta Incorrecta");
+                tvShowsSet.remove(currentTVShow);
+                loadRandomTVShow();
             }
             answerTextView.setVisibility(View.VISIBLE);
         }

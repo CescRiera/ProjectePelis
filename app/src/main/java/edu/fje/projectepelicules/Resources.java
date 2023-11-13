@@ -23,7 +23,12 @@ public class Resources {
                 new TVShow("True Detective", R.drawable.td),
                 new TVShow("The Wire", R.drawable.tw),
                 new TVShow("Prison Break", R.drawable.pb),
-                new TVShow("The Shield", R.drawable.theshie)
+                new TVShow("The Shield", R.drawable.theshie),
+                new TVShow("Band of Brothers", R.drawable.bob),
+                new TVShow("Succecion", R.drawable.suc),
+                new TVShow("MadMan",-1),
+                new TVShow("Strenger Things",-1),
+                new TVShow("Dark",-1),
         };
     }
 }
