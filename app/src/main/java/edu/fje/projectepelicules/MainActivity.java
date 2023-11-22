@@ -49,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
         loadRandomTVShow();
     }
 
-    private TVShow getRandomTVShow() {
-        List<TVShow> tvShowsList = new ArrayList<>(tvShowsSet);
-        Collections.shuffle(tvShowsList);
-        return tvShowsList.get(0);
-    }
 
     private void initializeTVShows() {
         tvShowsSet = new HashSet<>();
@@ -64,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     // Modify loadRandomTVShow to reset the UI for retrying
     private void loadRandomTVShow() {
         // Select a new random TV show from the remaining set
-        currentTVShow = getRandomTVShow();
+        currentTVShow = Metode.getRandomTVShow(tvShowsSet);
 
         // Check if the selected TV show has a valid image ID
         if (currentTVShow.getImageResourceId() != -1) {
@@ -72,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             imageView.setImageResource(currentTVShow.getImageResourceId());
 
             // Display the TV show name as the correct option
-            List<String> options = getRandomOptions(currentTVShow.getName());
+            List<String> options = Metode.getRandomOptions(currentTVShow.getName(), tvShowsSet);
             Collections.shuffle(options);
 
             int radioButtonsCount = radioGroup.getChildCount();
@@ -91,20 +86,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private List<String> getRandomOptions(String correctOption) {
-        List<String> options = new ArrayList<>();
-        options.add(correctOption);
-
-        while (options.size() < 4) {
-            TVShow randomTVShow = getRandomTVShow();
-            if (!options.contains(randomTVShow.getName())) {
-                options.add(randomTVShow.getName());
-            }
-        }
-
-        return options;
-    }
 
     private void checkAnswer() {
         int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
@@ -125,8 +106,14 @@ public class MainActivity extends AppCompatActivity {
                 tvShowsSet.remove(currentTVShow);
                 loadRandomTVShow();
             } else {
-                tvShowsSet.remove(currentTVShow);
-                loadRandomTVShow();
+                currentTVShow.incrementIncorrectAttempts();
+                if (currentTVShow.getIncorrectAttempts() == 4){
+                    tvShowsSet.remove(currentTVShow);
+                    loadRandomTVShow();
+                }else{
+                    imageView.setImageResource(currentTVShow.getImageResourceIdByAttempt());
+                }
+
             }
             answerTextView.setVisibility(View.VISIBLE);
         }
