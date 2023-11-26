@@ -1,19 +1,8 @@
 package edu.fje.projectepelicules;
 
-public class Resources {
-    public static int[] TVShowImages = {
-            R.drawable.got1,
-            R.drawable.thesop,
-            R.drawable.bb,
-            R.drawable.bcs,
-            R.drawable.theshie,
-            R.drawable.bob,
-            R.drawable.pb,
-            R.drawable.td,
-            R.drawable.suc,
-            R.drawable.tw,
+import java.util.Set;
 
-    };
+public class Resources {
     public TVShow[] getTVShows() {
         return new TVShow[] {
                 new TVShow("Game of Thrones",R.drawable.got1_part1,R.drawable.got1_part2,R.drawable.got1_part3,R.drawable.got1_part4),
@@ -30,6 +19,17 @@ public class Resources {
                 new TVShow("Strenger Things",-1,-1,-1,-1),
                 new TVShow("Dark",-1,-1,-1,-1),
         };
+    }
+    public boolean NoQuedenImatges(Set<TVShow> tvShows) {
+        int imatgesValides = 0;
+
+        for (TVShow shows : tvShows) {
+            if (shows.getImageResourceId() != -1) {
+                imatgesValides++;
+            }
+        }
+
+        return imatgesValides == 0;
     }
 }
 

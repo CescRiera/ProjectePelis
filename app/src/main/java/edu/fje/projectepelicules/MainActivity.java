@@ -1,17 +1,14 @@
 package edu.fje.projectepelicules;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -19,10 +16,11 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int PuntuacioTotal = 0;
     private ImageView imageView;
     private RadioGroup radioGroup;
     private Button checkButton;
-    private TextView answerTextView;
+
     private Set<TVShow> tvShowsSet;
     private TVShow currentTVShow;
 
@@ -34,77 +32,78 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         radioGroup = findViewById(R.id.radioGroup);
         checkButton = findViewById(R.id.checkButton);
-        answerTextView = findViewById(R.id.answerTextView);
 
         initializeTVShows();
         Metode.shuffleArray(tvShowsSet.toArray());
 
-        checkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer();
-            }
-        });
-
         loadRandomTVShow();
+
+        checkButton.setOnClickListener(v -> checkAnswer());
     }
 
 
     private void initializeTVShows() {
         tvShowsSet = new HashSet<>();
-        Resources resources = new Resources();
-        Collections.addAll(tvShowsSet, resources.getTVShows());
+        Resources recrusos = new Resources();
+        Collections.addAll(tvShowsSet, recrusos.getTVShows());
     }
 
-    // Modify loadRandomTVShow to reset the UI for retrying
-    private void loadRandomTVShow() {
-        // Select a new random TV show from the remaining set
-        currentTVShow = Metode.getRandomTVShow(tvShowsSet);
+   private void loadRandomTVShow() {
 
-        // Check if the selected TV show has a valid image ID
-        if (currentTVShow.getImageResourceId() != -1) {
-            // Display the new image
-            imageView.setImageResource(currentTVShow.getImageResourceId());
+       Resources recurs1 = new Resources();
+       if (recurs1.NoQuedenImatges(tvShowsSet)) {
+           moveToPantallaFinal();
+       } else {
 
-            // Display the TV show name as the correct option
-            List<String> options = Metode.getRandomOptions(currentTVShow.getName(), tvShowsSet);
-            Collections.shuffle(options);
 
-            int radioButtonsCount = radioGroup.getChildCount();
-            for (int i = 0; i < radioButtonsCount; i++) {
-                RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
-                radioButton.setText(options.get(i));
-            }
+           // Select a new random TV show from the remaining set
+           currentTVShow = Metode.getRandomTVShow(tvShowsSet);
 
-            checkButton.setEnabled(true);
-            answerTextView.setVisibility(View.GONE);
-            radioGroup.clearCheck();
-        } else {
-            // Handle the case where the TV show has no image ID
-            // You can choose to skip this TV show and load another one or handle it as needed.
-            loadRandomTVShow();
-        }
+           // Check if the selected TV show has a valid image ID
+           if (currentTVShow.getImageResourceId() != -1) {
+               // Display the new image
+               imageView.setImageResource(currentTVShow.getImageResourceId());
+
+               // Display the TV show name as the correct option
+               List<String> options = Metode.getRandomOptions(currentTVShow.getName(), tvShowsSet);
+               Collections.shuffle(options);
+
+               int radioButtonsCount = radioGroup.getChildCount();
+               for (int i = 0; i < radioButtonsCount; i++) {
+                   RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                   radioButton.setText(options.get(i));
+               }
+
+               checkButton.setEnabled(true);
+               radioGroup.clearCheck();
+           } else {
+               loadRandomTVShow();
+           }
+       }
     }
 
 
+
+    private void moveToPantallaFinal() {
+        Intent intent = new Intent(MainActivity.this, PantallaFinal.class);
+        intent.putExtra("FINAL_SCORE", PuntuacioTotal);
+        startActivity(intent);
+        finish();
+    }
     private void checkAnswer() {
         int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
         RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
 
         if (selectedRadioButton != null) {
             String selectedOption = selectedRadioButton.getText().toString();
-            boolean isCorrect = false;
 
-            for (TVShow tvShow : tvShowsSet) {
-                if (currentTVShow.getName().equals(selectedOption)) {
-                    isCorrect = true;
-                    break;
-                }
-            }
-
-            if (isCorrect) {
+            if (currentTVShow.getName().equals(selectedOption)) {
+                int incorrectAttempts = currentTVShow.getIncorrectAttempts();
+                int puntsShow = 4 - incorrectAttempts;
+                PuntuacioTotal += puntsShow;
                 tvShowsSet.remove(currentTVShow);
                 loadRandomTVShow();
+
             } else {
                 currentTVShow.incrementIncorrectAttempts();
                 if (currentTVShow.getIncorrectAttempts() == 4){
@@ -112,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
                     loadRandomTVShow();
                 }else{
                     imageView.setImageResource(currentTVShow.getImageResourceIdByAttempt());
+
                 }
 
             }
-            answerTextView.setVisibility(View.VISIBLE);
         }
     }
 }
