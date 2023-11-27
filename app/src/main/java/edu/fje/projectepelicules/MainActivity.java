@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private Set<TVShow> tvShowsSet;
     private TVShow currentTVShow;
     private TextView hintTextView; //jd
-    private ProgressBar progressBar; //jd
+    private ProgressBar progressBar; // Declare the ProgressBar
+    private int preguntasRespondidas = 0;
+    private int totalPreguntas = 0;
 
 
 
@@ -39,17 +41,22 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         radioGroup = findViewById(R.id.radioGroup);
         checkButton = findViewById(R.id.checkButton);
-        hintTextView = findViewById(R.id.hintTextView); //jd
-        progressBar = findViewById(R.id.progressBar); //jd
+        hintTextView = findViewById(R.id.hintTextView);
+        progressBar = findViewById(R.id.progressBar);
 
+        initializeProgressBar();
 
         initializeTVShows();
         Metode.shuffleArray(tvShowsSet.toArray());
 
         loadRandomTVShow();
-
         checkButton.setOnClickListener(v -> checkAnswer());
     }
+    private void initializeProgressBar() {
+        progressBar.setMax(100);
+        progressBar.setProgress(0);
+    }
+
 
 
     private void initializeTVShows() {
@@ -86,23 +93,14 @@ public class MainActivity extends AppCompatActivity {
 
                 checkButton.setEnabled(true);
                 radioGroup.clearCheck();
+                preguntasRespondidas++;
+                totalPreguntas++;
 
 
             } else {
                 loadRandomTVShow();
             }
         }
-    }
-
-    private void actualizarProgressBar() { //jd
-        int progreso = calcularProgreso();
-        progressBar.setProgress(progreso);
-    }
-
-    private int calcularProgreso() { //jd
-        int totalPreguntas = tvShowsSet.size();
-        int preguntasRespondidas = totalPreguntas - tvShowsSet.size();
-        return (int) ((preguntasRespondidas / (float) totalPreguntas) * 100);
     }
 
 
@@ -130,9 +128,11 @@ public class MainActivity extends AppCompatActivity {
                 int puntsShow = 4 - incorrectAttempts;
                 PuntuacioTotal += puntsShow;
                 tvShowsSet.remove(currentTVShow);
-                actualizarProgressBar(); //jd
                 loadRandomTVShow();
                 hintTextView.setVisibility(View.GONE);
+                int progressIncrement = 10;
+                int currentProgress = progressBar.getProgress() + progressIncrement;
+                progressBar.setProgress(currentProgress);
 
 
             } else {
@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 if (currentTVShow.getIncorrectAttempts() == 4){
                     hintTextView.setVisibility(View.GONE);
                     tvShowsSet.remove(currentTVShow);
-                    actualizarProgressBar(); //jd
 
                     loadRandomTVShow();
+
 
                 }else{
 

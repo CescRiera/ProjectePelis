@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#000000"
+        android:onClick="startGame"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        android:text="Start Game"
+        android:textColor="@color/white"
+        android:textColorHighlight="#DF1414"
+        android:textColorLink="#EA0F0F"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startGameButton"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#000000"
+        android:onClick="mostraAjuda"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        android:text="Ajuda"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+</RelativeLayout>

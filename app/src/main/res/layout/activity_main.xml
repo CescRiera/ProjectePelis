@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
-    android:textAlignment="center"
+    android:background="#000000"
     tools:context=".MainActivity">
 
     <ImageView
@@ -18,13 +18,14 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:max="100"
-        android:progress="0"
-        android:visibility="visible" />
-
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="177dp"
+        android:layout_height="0dp"
+        android:progressTint="#11CD88"
+        app:layout_constraintBottom_toBottomOf="@+id/score"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -53,20 +54,22 @@
             android:layout_margin="8dp"
             android:background="#FFFFFF"
             android:text="Option 2"
-            android:textColor="#000000"
+            android:textStyle="normal|bold"
             android:textSize="17sp"
-            android:textStyle="normal|bold" />
+            android:textColor="#000000"
+            />
 
         <RadioButton
             android:id="@+id/radioOption3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="normal|bold"
             android:layout_margin="8dp"
             android:background="#FFFFFF"
             android:text="Option 3"
-            android:textColor="#000000"
             android:textSize="17sp"
-            android:textStyle="normal|bold" />
+            android:textColor="#000000"
+            />
 
         <RadioButton
             android:id="@+id/radioOption4"
@@ -74,29 +77,30 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="#FFFFFF"
+            android:textStyle="normal|bold"
             android:text="Option 4"
-            android:textColor="#000000"
             android:textSize="17sp"
-            android:textStyle="normal|bold" />
-
+            android:textColor="#000000"
+            />
     </RadioGroup>
 
     <Button
         android:id="@+id/checkButton"
+        android:textStyle="normal|bold"
         android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginTop="16dp"
-        android:gravity="center"
         android:text="Check"
+        android:textSize="20sp"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/hintTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroup"
         android:layout_marginTop="16dp"
         android:text=""
-        android:textColorHint="#FFFFFF"
         android:textSize="18sp" />
 </LinearLayout>

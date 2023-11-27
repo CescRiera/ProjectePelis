@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Pàgina d'ajuda</title>
+    <link rel="stylesheet" type="text/css" href="ajuda.css">
+    <script>
+        function goBack() {
+            Android.goBackFromWebView(); // Llama al método en PantallaInici para volver
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Regles del Joc</h1>
+    <p><strong>Funcionalitat:</strong> La funcionalitat d'aquest joc és senzilla: en prémer el botó "START", es mostrarà una imatge d'una sèrie de TV. Tindràs 4 intents per endevinar de quina sèrie es tracta. En el primer intent, només es mostrarà una part de la imatge i, a mesura que fallis, es revelarà més de la mateixa.</p>
+    <p><strong>Puntuació:</strong> La puntuació es dóna de la següent manera: si encerts en el primer intent, obtens 4 punts. Si encerts en el segon, rebràs 3 punts, i així successivament fins al quart intent. Si falles en l'últim intent, no obtens cap punt.</p>
+    <p>Al final del joc, es mostrarà una pantalla amb la teva puntuació obtinguda.</p>
+    <p>Passa-ho bé i a JUGAR!</p>
+    <div class="additional-content">
+        <p>Si tens més preguntes: <a href="https://support.google.com/android/?hl=es#topic=7313011" target="_blank"> Suport d'Android</a></p>
+    </div>
+    <button onclick="goBack()">PANTALLA INICIAL</button>
+</div>
+</body>
+</html>
