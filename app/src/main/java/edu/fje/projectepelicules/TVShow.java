@@ -8,16 +8,21 @@ public class TVShow {
 
 
     private String name;
+    private String hint;
 
-    public TVShow(String name, int imageResourceID_part1,int imageResourceID_part2, int imageResourceID_part3, int imageResourceID_part4) {
+    public TVShow(String name, int imageResourceID_part1,int imageResourceID_part2, int imageResourceID_part3, int imageResourceID_part4,String hint) { //jd el string
 
         this.imageResourceID_part1 = imageResourceID_part1;
         this.imageResourceID_part2 = imageResourceID_part2;
         this.imageResourceID_part3 = imageResourceID_part3;
         this.imageResourceID_part4 = imageResourceID_part4;
         this.name = name;
+        this.hint = hint; //JD
     }
 
+    public String getHint() { //JD
+        return hint;
+    }
     public String getName() {
         return name;
     }
@@ -49,4 +54,3 @@ public class TVShow {
         }
     }
 }
-
